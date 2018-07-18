@@ -1,45 +1,67 @@
 %{
 #include <stdio.h>
-#include "tabela.h"
-#include "arvore.h"
 
 int yylex(void);
 void yyerror(char *);
 
-pilha_contexto *pilha;
-
 %}
 
-%token TYPE INT FLOAT PRINT NUMBER ID EXPR ATTR ADD SUB
+%union {
+	int ival;	
+	double dval;
+}
+
+%token <ival> INT 
+%token <dval> FLOAT
+%token <ival> ID
+%token <ival> TYPE
+
+%token PRINT SCAN NUMBER EXPR ATTR VAR
+
 %left '+' '-'
+%left '*' '/'
 %%
 
 
 program:
-			
-	program bloco		{ }
+	program bloco { }
 	|
 	; 	
 
 bloco: 
-	'{' 			{ tabela *contexto = criar_contexto(topo_pilha(pilha));
-				  pilha = empilhar_contexto(pilha, contexto);
-
-				 }
-	decls stmts '}'		{ imprimir_contexto(topo_pilha(pilha));
-				  desempilhar_contexto(&pilha); }
+	cmd '{' 	{ }
+ 	| decls stmts '}' 	{ }
+	|
 	;
 
+cmd:
+	FUNC ID '(' method ')'
+	;
+
+params:
+	params 
+	cond
+	|
+	;
+	
 decls: 
 	decls decl		{ }
 	|
 	;
-	
 decl:
-	TYPE	ID ';'		{	simbolo * s = criar_simbolo((char *) $2, $1); 
-					inserir_simbolo(topo_pilha(pilha), s); }
-
+	VAR ID TYPE ';' 	{	}
 	;
+
+//tentar implementar depois, declaração de multivalores em uma linha
+/* 	
+decl:
+	VAR ids TYPE ';' 	{	}
+	;
+
+ids:
+	ID ',' {}
+	;
+*/
 
 stmts: 
 	stmts stmt
@@ -50,37 +72,20 @@ stmt:
 	expr ';'		{	}
 	| bloco
 	| attr			{	}
-
 	;
 
 attr: 
-	ID '=' expr ';'		{ simbolo * s = localizar_simbolo(topo_pilha(pilha), (char *) $1);
-				  if(s == NULL)
-					yyerror("Identificador não declarado");
-				  else  {
-					no_arvore *n = criar_no_atribuicao(s, (void *) $3);
-					$$ = (int) n;
-				  }
-				}
-expr:
+	ID '=' expr ';'		{ }
+	;
 
-	 NUMBER			{ no_arvore *n = criar_no_expressao(NUMBER, (void *) $1, NULL); 
-				  $$ = (int) n; }
-	| ID			{ simbolo * s = localizar_simbolo(topo_pilha(pilha), (char *) $1);
-				  if(s == NULL)
-					yyerror("Identificador não declarado");
-				  else  {
-					no_arvore *n = criar_no_expressao(ID, s, NULL);
-					$$ = (int) n;
-				  }
-				}
-	| expr'+' expr		{ no_arvore *n = criar_no_expressao('+', (void *) $1, (void *) $3); 
-				  $$ = (int) n; }
-	| expr '-' expr		{ no_arvore *n = criar_no_expressao('-', (void *) $1, (void *) $3);
-//passa a referencia para a tabela de símbolos contextual com 
-//topo_pilha(pilha) 
-				  $$ = (int) n; }
-	| '(' expr ')'		{ $$ = $2; }
+expr:
+ 	NUMBER	{ }
+	| ID { }
+	| expr '+' expr		{ }
+	| expr '-' expr		{ }
+	| expr '*' expr		{ }
+	| expr '/' expr		{ }
+	| '(' expr ')'		{ }
 	; 
 
 %%
