@@ -3,10 +3,9 @@ package main
 import "fmt"
 
 func main() {
-	var sum int = 0;
-	var i int
-	for i = 0; i < 10; i++ {
-		sum += i
-	}
+	var sum int = 0
+	var i int = 0
+
+
 	fmt.Println(sum)
 }

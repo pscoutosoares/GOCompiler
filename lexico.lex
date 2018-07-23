@@ -28,13 +28,10 @@ float {
 var{
 	return VAR;
 }
-func {
-	return FUNC;
-}
-PRINT {	
+fmt.Println {	
 	return PRINT; 
 }
-SCAN {
+fmt.Scanf {
 	return SCAN
 }
 {identificador}	{
@@ -43,22 +40,26 @@ SCAN {
 }
 
 if {
-
+	return IF;
 }	
 else {
-
+	return ELSE;
 }
 
 for {
-
+	return FOR
+}
+func main() {
+	
 }
 
-"<"		{}
-"<="	{}
-"="		{}
-"<>"	{}
-">"		{}
-">="	{}
+
+"<"		{return LT;}
+"<="	{return LE;}
+"="		{return EQ;}
+"<>"	{return NE;}
+">"		{return GT;}
+">="	{return GE;}
 
 
 

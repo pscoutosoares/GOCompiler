@@ -15,8 +15,8 @@ void yyerror(char *);
 %token <dval> FLOAT
 %token <ival> ID
 %token <ival> TYPE
-
-%token PRINT SCAN NUMBER EXPR ATTR VAR
+%token LT LE EQ NE GT GE 
+%token PRINT SCAN NUMBER EXPR ATTR VAR IF ELSE FOR
 
 %left '+' '-'
 %left '*' '/'
@@ -24,26 +24,32 @@ void yyerror(char *);
 
 
 program:
-	program bloco { }
+	program bloco {}
 	|
 	; 	
 
 bloco: 
-	cmd '{' 	{ }
+	cond '{' 	{ }
+	| loop '{'	{}
  	| decls stmts '}' 	{ }
-	|
 	;
 
-cmd:
-	FUNC ID '(' method ')'
+cond:
+	IF logic bloco
+	;
+loop:
+	FOR logic bloco
+	; 
+
+logic:
+	expr LT expr 
+	| expr LE expr
+	| expr EQ expr 
+	| expr NE expr
+	| expr GT expr
+	| expr GE expr
 	;
 
-params:
-	params 
-	cond
-	|
-	;
-	
 decls: 
 	decls decl		{ }
 	|
@@ -51,17 +57,6 @@ decls:
 decl:
 	VAR ID TYPE ';' 	{	}
 	;
-
-//tentar implementar depois, declaração de multivalores em uma linha
-/* 	
-decl:
-	VAR ids TYPE ';' 	{	}
-	;
-
-ids:
-	ID ',' {}
-	;
-*/
 
 stmts: 
 	stmts stmt

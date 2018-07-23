@@ -49,12 +49,21 @@ extern int yydebug;
     FLOAT = 259,
     ID = 260,
     TYPE = 261,
-    PRINT = 262,
-    SCAN = 263,
-    NUMBER = 264,
-    EXPR = 265,
-    ATTR = 266,
-    VAR = 267
+    LT = 262,
+    LE = 263,
+    EQ = 264,
+    NE = 265,
+    GT = 266,
+    GE = 267,
+    PRINT = 268,
+    SCAN = 269,
+    NUMBER = 270,
+    EXPR = 271,
+    ATTR = 272,
+    VAR = 273,
+    IF = 274,
+    ELSE = 275,
+    FOR = 276
   };
 #endif
 /* Tokens.  */
@@ -62,12 +71,21 @@ extern int yydebug;
 #define FLOAT 259
 #define ID 260
 #define TYPE 261
-#define PRINT 262
-#define SCAN 263
-#define NUMBER 264
-#define EXPR 265
-#define ATTR 266
-#define VAR 267
+#define LT 262
+#define LE 263
+#define EQ 264
+#define NE 265
+#define GT 266
+#define GE 267
+#define PRINT 268
+#define SCAN 269
+#define NUMBER 270
+#define EXPR 271
+#define ATTR 272
+#define VAR 273
+#define IF 274
+#define ELSE 275
+#define FOR 276
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -79,7 +97,7 @@ union YYSTYPE
 	int ival;	
 	double dval;
 
-#line 83 "y.tab.h" /* yacc.c:1909  */
+#line 101 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
