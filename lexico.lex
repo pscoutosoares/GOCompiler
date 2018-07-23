@@ -1,7 +1,8 @@
 %{
 #include <stdlib.h>
-void yyerror(char *);
 #include "y.tab.h"
+void yyerror(char *c);
+
 %}
 
 delim	[ \t\n]
@@ -14,45 +15,39 @@ identificador	{letra}({letra}|{digito})*
 %%
 {ws}	{}
 {numero}+	{ 
-	yylval = atoi(yytext);
+	//yylval = atoi(yytext);
 	return NUMBER;
 }
 int	{	
-	yylval = INT;
+	//yylval = INT;
 	return TYPE;
 }
 float {
-	yylval = FLOAT;
+	//yylval = FLOAT;
 	return TYPE;
 }
-var{
+var {
 	return VAR;
 }
-fmt.Println {	
-	return PRINT; 
-}
-fmt.Scanf {
-	return SCAN
-}
-{identificador}	{
-	yylval = (int) strdup(yytext);
-	return ID;
-}
-
 if {
 	return IF;
 }	
 else {
 	return ELSE;
 }
-
 for {
-	return FOR
+	return FOR;
 }
-func main() {
-	
+'fmt.Println' {	
+	return PRINT; 
 }
-
+'fmt.Scanf' {
+	return SCAN;
+}
+{identificador}	{
+	//yylval = (int) strdup(yytext);
+	return ID;
+}
 
 "<"		{return LT;}
 "<="	{return LE;}
@@ -61,14 +56,7 @@ func main() {
 ">"		{return GT;}
 ">="	{return GE;}
 
-
-
-
-
-[-+*;=\/\(\)]	{return *yytext; }  // removi \n
-
-
-
+[-+*=;\{\}\/\(\)]	{return *yytext; }  // removi \n
 . 	yyerror("invalid character");
 
 %%

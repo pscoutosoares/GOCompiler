@@ -44,3 +44,8 @@ i) gerador de código mips
 j) testar o código gerado, com os programas de exemplo criados em b) e simular o resultado no spim
 
 l) FÉRIAS !!!
+
+//yacc calc.yacc -d
+//lex calc.lex
+//gcc *.c -o calc
+

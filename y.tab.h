@@ -49,21 +49,22 @@ extern int yydebug;
     FLOAT = 259,
     ID = 260,
     TYPE = 261,
-    LT = 262,
-    LE = 263,
-    EQ = 264,
-    NE = 265,
-    GT = 266,
-    GE = 267,
-    PRINT = 268,
-    SCAN = 269,
-    NUMBER = 270,
-    EXPR = 271,
-    ATTR = 272,
-    VAR = 273,
-    IF = 274,
-    ELSE = 275,
-    FOR = 276
+    FOR = 262,
+    IF = 263,
+    ELSE = 264,
+    LT = 265,
+    LE = 266,
+    EQ = 267,
+    NE = 268,
+    GT = 269,
+    GE = 270,
+    PRINT = 271,
+    SCAN = 272,
+    EXPR = 273,
+    ATTR = 274,
+    VAR = 275,
+    NUMBER = 276,
+    UMINUS = 277
   };
 #endif
 /* Tokens.  */
@@ -71,21 +72,22 @@ extern int yydebug;
 #define FLOAT 259
 #define ID 260
 #define TYPE 261
-#define LT 262
-#define LE 263
-#define EQ 264
-#define NE 265
-#define GT 266
-#define GE 267
-#define PRINT 268
-#define SCAN 269
-#define NUMBER 270
-#define EXPR 271
-#define ATTR 272
-#define VAR 273
-#define IF 274
-#define ELSE 275
-#define FOR 276
+#define FOR 262
+#define IF 263
+#define ELSE 264
+#define LT 265
+#define LE 266
+#define EQ 267
+#define NE 268
+#define GT 269
+#define GE 270
+#define PRINT 271
+#define SCAN 272
+#define EXPR 273
+#define ATTR 274
+#define VAR 275
+#define NUMBER 276
+#define UMINUS 277
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -97,7 +99,7 @@ union YYSTYPE
 	int ival;	
 	double dval;
 
-#line 101 "y.tab.h" /* yacc.c:1909  */
+#line 103 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

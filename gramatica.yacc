@@ -15,11 +15,16 @@ void yyerror(char *);
 %token <dval> FLOAT
 %token <ival> ID
 %token <ival> TYPE
+%token FOR  
+%token IF ELSE
 %token LT LE EQ NE GT GE 
-%token PRINT SCAN NUMBER EXPR ATTR VAR IF ELSE FOR
+%token PRINT SCAN 
+%token EXPR ATTR VAR
 
 %left '+' '-'
 %left '*' '/'
+%token NUMBER
+%right UMINUS  
 %%
 
 
@@ -29,25 +34,8 @@ program:
 	; 	
 
 bloco: 
-	cond '{' 	{ }
-	| loop '{'	{}
- 	| decls stmts '}' 	{ }
-	;
-
-cond:
-	IF logic bloco
-	;
-loop:
-	FOR logic bloco
-	; 
-
-logic:
-	expr LT expr 
-	| expr LE expr
-	| expr EQ expr 
-	| expr NE expr
-	| expr GT expr
-	| expr GE expr
+	'{' 	{}
+ 	decls stmts '}' 	{ }
 	;
 
 decls: 
@@ -64,9 +52,29 @@ stmts:
 	;
 
 stmt:
-	expr ';'		{	}
-	| bloco
+	cond
+	| loop
+	| expr ';'		{	}
+	| bloco			{ }
 	| attr			{	}
+	;
+
+cond:
+	IF logic bloco
+	| IF logic bloco ELSE bloco   {}
+	;
+
+loop:
+	FOR logic bloco
+	; 
+
+logic:
+	expr LT expr 
+	| expr LE expr
+	| expr EQ expr 
+	| expr NE expr
+	| expr GT expr
+	| expr GE expr
 	;
 
 attr: 
@@ -74,13 +82,13 @@ attr:
 	;
 
 expr:
- 	NUMBER	{ }
-	| ID { }
-	| expr '+' expr		{ }
+	expr '+' expr		{ }
 	| expr '-' expr		{ }
 	| expr '*' expr		{ }
 	| expr '/' expr		{ }
 	| '(' expr ')'		{ }
+	| NUMBER	{ }
+	| ID { }
 	; 
 
 %%
@@ -90,7 +98,7 @@ void yyerror(char *s) {
 }
 
 int main(void) {
-	pilha = NULL;
+	//pilha = NULL;
 	yyparse();
 	return 0;
 }
