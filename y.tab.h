@@ -58,13 +58,25 @@ extern int yydebug;
     NE = 268,
     GT = 269,
     GE = 270,
-    PRINT = 271,
-    SCAN = 272,
-    EXPR = 273,
-    ATTR = 274,
-    VAR = 275,
-    NUMBER = 276,
-    UMINUS = 277
+    AND = 271,
+    OR = 272,
+    NOT = 273,
+    PRINT = 274,
+    SCAN = 275,
+    EXPR = 276,
+    ATTR = 277,
+    VAR = 278,
+    STMT = 279,
+    STMTS = 280,
+    BLOCO = 281,
+    PROGRAM = 282,
+    ADD = 283,
+    SUB = 284,
+    MUL = 285,
+    DIV = 286,
+    MOD = 287,
+    NUMBER = 288,
+    UMINUS = 289
   };
 #endif
 /* Tokens.  */
@@ -81,28 +93,29 @@ extern int yydebug;
 #define NE 268
 #define GT 269
 #define GE 270
-#define PRINT 271
-#define SCAN 272
-#define EXPR 273
-#define ATTR 274
-#define VAR 275
-#define NUMBER 276
-#define UMINUS 277
+#define AND 271
+#define OR 272
+#define NOT 273
+#define PRINT 274
+#define SCAN 275
+#define EXPR 276
+#define ATTR 277
+#define VAR 278
+#define STMT 279
+#define STMTS 280
+#define BLOCO 281
+#define PROGRAM 282
+#define ADD 283
+#define SUB 284
+#define MUL 285
+#define DIV 286
+#define MOD 287
+#define NUMBER 288
+#define UMINUS 289
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-
-union YYSTYPE
-{
-#line 9 "gramatica.yacc" /* yacc.c:1909  */
-
-	int ival;	
-	double dval;
-
-#line 103 "y.tab.h" /* yacc.c:1909  */
-};
-
-typedef union YYSTYPE YYSTYPE;
+typedef int YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif

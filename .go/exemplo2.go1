@@ -1,0 +1,11 @@
+package main
+
+import "fmt"
+
+func main() {
+	var sum int;
+	sum = 5;
+	var sum float32;
+	sum = 5;
+	fmt.Println(sum);
+}

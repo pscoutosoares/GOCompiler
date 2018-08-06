@@ -1,0 +1,22 @@
+a) Feito: int, float 
+   Falta: string 
+b) expressões aritméticas:
+	Feito: ( -, +, *, /) ,( Maior que, menor que, maior ou igual, menor ou igual, igual e diferente)
+	Falta: lógicas ( AND, OR e NOT), aritimetica ( MOD)
+c) precedência de operadores:
+	Feito: (verificar regras da linguagem) / utilização de parênteses para "alterar" a precedência;
+
+d) 1 comando condicional: 
+	Feito: if-else
+
+e) 1 comando de repetição:
+	feito: for
+
+	Feito:
+f) aninhamento entre os blocos;
+g) contexto das variáveis (global, local e bloco);
+h) algum comando para exibir o valor das variáveis (print ou equivalente)
+i) algum comando para receber o valor das variáveis (scan ou equivalente)
+
+	Falta:
+j) verificações de tipo de declaração de variável e tipos de expressão

@@ -1,0 +1,11 @@
+{
+	var a int;
+	a = 5;
+	{
+		a = 5 + a;
+		var i float64;
+		i = 10;
+	}
+}
+
+

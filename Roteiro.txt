@@ -45,7 +45,7 @@ j) testar o código gerado, com os programas de exemplo criados em b) e simular 
 
 l) FÉRIAS !!!
 
-//yacc calc.yacc -d
+//0			yacc calc.yacc -d
 //lex calc.lex
 //gcc *.c -o calc
 
