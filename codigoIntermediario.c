@@ -6,8 +6,31 @@
 #include "tabelaNumero.h"
 #include "y.tab.h"
 
-
+/////////////////////// Manipulação da lista encadeada//////////////////////
 int temp_ctr = 1;
+
+//Inicializa a lista e retorna seu endereço
+lista * inicializar_lista (){
+	lista *temp = (lista *) malloc(sizeof(lista));
+	//no_lista *cursor  = (no_lista *) malloc(sizeof(no_lista));
+	//temp->primeiro = cursor;
+	return temp;
+}
+
+// retorna o ultimo nó da lista, caso a lista seja vazia, então retorna NULL
+no_lista * ultimo_no(lista *l){
+	if (l->primeiro == NULL){
+		return NULL; 
+	}
+	else{
+		no_lista * temp = (no_lista *) malloc(sizeof(no_lista));
+		temp = l->primeiro;
+		while(temp->proximo != NULL){
+			temp = temp->proximo;
+		}
+		return temp;
+	}
+}
 
 //Insere nó na lista, não retorna nada
 void inserir_no_lista(lista *l, instrucao *inst) {
@@ -31,7 +54,7 @@ void inserir_no_lista(lista *l, instrucao *inst) {
 	}
 }
 
-//Aloca as instruções na struct e retorna o endereço dessa instrução
+//Aloca as instruções na lista encadeada e retorna o endereço dessa instrução
 instrucao * criar_instrucao( int opcode, void *resultado, void *esq, void *dir){
 	instrucao *temp = (instrucao *) malloc(sizeof(instrucao));
 	
@@ -42,39 +65,8 @@ instrucao * criar_instrucao( int opcode, void *resultado, void *esq, void *dir){
 	return temp;
 }
 
-// retorna o ultimo nó da lista, caso a lista seja vazia, então retorna NULL
-no_lista * ultimo_no(lista *l){
-	if (l->primeiro == NULL){
-		return NULL; 
-	}
-	else{
-		no_lista * temp = (no_lista *) malloc(sizeof(no_lista));
-		temp = l->primeiro;
-		while(temp->proximo != NULL){
-			temp = temp->proximo;
-		}
-		return temp;
-	}
-}
 
-//Inicializa a lista e retorna seu endereço
-lista * inicializar_lista (){
-	lista *temp = (lista *) malloc(sizeof(lista));
-	//no_lista *cursor  = (no_lista *) malloc(sizeof(no_lista));
-	//temp->primeiro = cursor;
-	return temp;
-}
-
-
-
-
-
-char * gerar_temp() {
-	char buffer[256];
-	sprintf(buffer, "t%d", temp_ctr++);
-	return strdup(buffer);
-}
-
+///////////////////////// Geração de código ////////////////////////////
 
 void gerar_codigo(no_arvore * raiz) {
 	if(raiz != NULL) {
@@ -85,9 +77,26 @@ void gerar_codigo(no_arvore * raiz) {
 			case ATTR:
 				gerar_codigo_attr(raiz);
 				break;
+			case LOGIC:
+			case LOOP:
+			case COND:
+			case STMT:
+			case STMTS:
+			case DECL:
+			case BLOCO:
+			case PROGRAM:
+			
+
+				break;
 		}
 	}
 }
+char * gerar_temp() {
+	char buffer[256];
+	sprintf(buffer, "t%d", temp_ctr++);
+	return strdup(buffer);
+}
+
 
 char * gerar_codigo_expr(no_arvore *raiz) {
 	char buffer[256];
@@ -140,7 +149,7 @@ void gerar_codigo_logic(no_arvore *raiz) {
 
 //Imprime toda a lista, de forma linear
 void imprimir_lista(lista *l){
-	printf("Imprimir Código\n");
+	printf("Inicio do imprimir Código\n");
 	no_lista *cursor  = (no_lista *) malloc(sizeof(no_lista));
 	cursor = l->primeiro;
 	if(cursor == NULL)

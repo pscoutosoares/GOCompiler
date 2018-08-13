@@ -24,7 +24,7 @@ lista *list;
 %token LT LE EQ NE GT GE 
 %token AND OR NOT
 %token PRINT SCAN 
-%token EXPR ATTR VAR STMT STMTS BLOCO PROGRAM LOGIC COND LOOP
+%token EXPR ATTR VAR STMT STMTS DECL BLOCO PROGRAM LOGIC COND LOOP 
 %token ADD SUB
 %token MUL DIV MOD
 %token SAVE LOAD
@@ -42,9 +42,9 @@ program:
 			$$ = (long int) n;
 
 			lista *list = inicializar_lista();
-			printf("%d\n",n->tipo);
 			instrucao *inst = criar_instrucao(n->tipo, NULL, n->dado.program->program_e, n->dado.program->program_d);
 			inserir_no_lista(list,inst);
+			imprimir_lista(list);
 		}
 	|
 	; 	
@@ -65,7 +65,7 @@ bloco:
 
 		}
 	;
-	
+
 decl:
 	VAR ID TYPE ';' 	
 		{ 
@@ -78,6 +78,10 @@ decl:
 				//insere o nó do simbolo na tabela do contexto atual,
 				//apontado pela pilha
 				inserir_simbolo(topo_pilha(pilha), s);
+
+
+
+
 			}
 			else  {
 				yyerror("Identificador já declarado");

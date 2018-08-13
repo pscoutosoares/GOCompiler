@@ -68,20 +68,21 @@ extern int yydebug;
     VAR = 278,
     STMT = 279,
     STMTS = 280,
-    BLOCO = 281,
-    PROGRAM = 282,
-    LOGIC = 283,
-    COND = 284,
-    LOOP = 285,
-    ADD = 286,
-    SUB = 287,
-    MUL = 288,
-    DIV = 289,
-    MOD = 290,
-    SAVE = 291,
-    LOAD = 292,
-    NUMBER = 293,
-    UMINUS = 294
+    DECL = 281,
+    BLOCO = 282,
+    PROGRAM = 283,
+    LOGIC = 284,
+    COND = 285,
+    LOOP = 286,
+    ADD = 287,
+    SUB = 288,
+    MUL = 289,
+    DIV = 290,
+    MOD = 291,
+    SAVE = 292,
+    LOAD = 293,
+    NUMBER = 294,
+    UMINUS = 295
   };
 #endif
 /* Tokens.  */
@@ -108,20 +109,21 @@ extern int yydebug;
 #define VAR 278
 #define STMT 279
 #define STMTS 280
-#define BLOCO 281
-#define PROGRAM 282
-#define LOGIC 283
-#define COND 284
-#define LOOP 285
-#define ADD 286
-#define SUB 287
-#define MUL 288
-#define DIV 289
-#define MOD 290
-#define SAVE 291
-#define LOAD 292
-#define NUMBER 293
-#define UMINUS 294
+#define DECL 281
+#define BLOCO 282
+#define PROGRAM 283
+#define LOGIC 284
+#define COND 285
+#define LOOP 286
+#define ADD 287
+#define SUB 288
+#define MUL 289
+#define DIV 290
+#define MOD 291
+#define SAVE 292
+#define LOAD 293
+#define NUMBER 294
+#define UMINUS 295
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

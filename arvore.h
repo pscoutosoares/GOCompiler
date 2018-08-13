@@ -46,6 +46,11 @@ typedef struct t_loop {
 	void  *loop_logica, *loop_bloco;
 } t_loop;
 
+typedef struct t_decl {
+	int tipo; //float ou int
+	simbolo *id;
+} t_decl;
+
 typedef union valor_sintatico {
 	t_expr *expr;
 	t_attr *attr;
@@ -56,6 +61,7 @@ typedef union valor_sintatico {
 	t_program *program;
 	t_cond *cond;
 	t_loop	*loop;
+	t_decl	*decl;
 } valor_sintatico;
 
 typedef struct no_arvore {
@@ -90,6 +96,9 @@ t_cond * criar_cond(void *cond_logica, void *cond_if, void *cond_else);
 
 no_arvore * criar_no_loop(void *loop_logica, void *loop_bloco);
 t_loop * criar_loop(void *loop_logica, void *loop_bloco);
+
+no_arvore * criar_no_decl(int tipo, simbolo *id);
+t_decl * criar_decls(int tipo, simbolo *id);
 
 
 #endif

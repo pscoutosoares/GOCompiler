@@ -78,6 +78,20 @@ t_stmts * criar_statements(void *stmts, void *stmt){
 	return novo;
 }
 
+///////////////////////Decl//////////////////////////////////////////
+no_arvore * criar_no_decl(int tipo, simbolo *id) {
+	no_arvore *novo = (no_arvore *)  malloc(sizeof(no_arvore));
+	novo->tipo = DECL;
+	novo->dado.decl =  criar_decls(tipo, id);
+	return novo;
+}
+t_decl * criar_decls(int tipo, simbolo *id){ 
+	t_decl * novo = (t_decl *) malloc(sizeof(t_decl));
+	novo->tipo = tipo;
+	novo->id = id;
+	return novo;
+}
+
 ///////////////////////Bloco//////////////////////////////////////////
 no_arvore * criar_no_bloco(void* stmts) {
 	no_arvore *novo = (no_arvore *)  malloc(sizeof(no_arvore));
