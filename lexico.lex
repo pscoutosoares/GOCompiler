@@ -25,23 +25,23 @@ scan 	fmt.Scanf
 	valor v;
 	v.dval = atoi(yytext);
 	/* o "uintptr_t" livra os warning de conversão pra ponteiro */
-	yylval = (long int) criar_numero(v, INT_type); 
+	yylval = (long int) criar_numero(v, INT);
 	return NUMBER;
 }
 
 {numero}+"."{numero}+	  { 
 	valor v;
 	v.fval = atof(yytext);
-	yylval = (long int) criar_numero(v, FLOAT_type);
+	yylval = (long int) criar_numero(v, FLOAT);
 	return NUMBER;
 }
 
 int	{	
-	yylval = INT_type;
+	yylval = INT;
 	return TYPE;
 }
 float64 {
-	yylval = FLOAT_type;
+	yylval = FLOAT;
 	return TYPE;
 }
 var {

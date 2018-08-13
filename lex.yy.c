@@ -788,7 +788,7 @@ YY_RULE_SETUP
 	valor v;
 	v.dval = atoi(yytext);
 	/* o "uintptr_t" livra os warning de conversão pra ponteiro */
-	yylval = (long int) criar_numero(v, INT_type); 
+	yylval = (long int) criar_numero(v, INT);
 	return NUMBER;
 }
 	YY_BREAK
@@ -798,7 +798,7 @@ YY_RULE_SETUP
 { 
 	valor v;
 	v.fval = atof(yytext);
-	yylval = (long int) criar_numero(v, FLOAT_type);
+	yylval = (long int) criar_numero(v, FLOAT);
 	return NUMBER;
 }
 	YY_BREAK
@@ -806,7 +806,7 @@ case 4:
 YY_RULE_SETUP
 #line 39 "lexico.lex"
 {	
-	yylval = INT_type;
+	yylval = INT;
 	return TYPE;
 }
 	YY_BREAK
@@ -814,7 +814,7 @@ case 5:
 YY_RULE_SETUP
 #line 43 "lexico.lex"
 {
-	yylval = FLOAT_type;
+	yylval = FLOAT;
 	return TYPE;
 }
 	YY_BREAK

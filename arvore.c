@@ -3,9 +3,10 @@
 #include "arvore.h"
 #include "y.tab.h"
 
+///////////////////////Expr//////////////////////////////////////////
 no_arvore * criar_no_expressao(int op, void *dir, void *esq) {
 	no_arvore *novo = (no_arvore *)  malloc(sizeof(no_arvore));
-	novo->tipo = EXPR;
+	novo->tipo = LOGIC;
 	novo->dado.expr =  criar_expressao(op, dir, esq);
 	return novo;
 }
@@ -20,6 +21,7 @@ t_expr * criar_expressao(int op, void *dir, void *esq) {
 	return novo;
 }
 
+///////////////////////Attr//////////////////////////////////////////
 no_arvore * criar_no_atribuicao(simbolo *resultado, void *expressao) {
 	no_arvore *novo = (no_arvore *)  malloc(sizeof(no_arvore));
 	novo->tipo = ATTR;
@@ -34,7 +36,22 @@ t_attr * criar_atribuicao(simbolo *resultado, void *expressao){
 	return novo;
 }
 
+///////////////////////Logic//////////////////////////////////////////
+no_arvore * criar_no_logic(int op, void *dir, void *esq) {
+	no_arvore *novo = (no_arvore *)  malloc(sizeof(no_arvore));
+	novo->tipo = LOGIC;
+	novo->dado.logic =  criar_logic(op, dir, esq);
+	return novo;
+}
+t_logic * criar_logic(int op, void *dir, void *esq){ 
+	t_logic * novo = (t_logic *) malloc(sizeof(t_logic));
+	novo->op = op;
+	novo->dir = dir;
+	novo->esq = esq;
+	return novo;
+}
 
+///////////////////////Stmt//////////////////////////////////////////
 no_arvore * criar_no_statement(void *stmt) {
 	no_arvore *novo = (no_arvore *)  malloc(sizeof(no_arvore));
 	novo->tipo = STMT;
@@ -47,7 +64,7 @@ t_stmt * criar_statement(void *stmt){
 	return novo;
 }
 
-
+///////////////////////Stmts//////////////////////////////////////////
 no_arvore * criar_no_statements(void *stmts, void *stmt) {
 	no_arvore *novo = (no_arvore *)  malloc(sizeof(no_arvore));
 	novo->tipo = STMTS;
@@ -61,6 +78,7 @@ t_stmts * criar_statements(void *stmts, void *stmt){
 	return novo;
 }
 
+///////////////////////Bloco//////////////////////////////////////////
 no_arvore * criar_no_bloco(void* stmts) {
 	no_arvore *novo = (no_arvore *)  malloc(sizeof(no_arvore));
 	novo->tipo = BLOCO;
@@ -73,7 +91,7 @@ t_bloco * criar_bloco(void* stmts){
 	return novo;
 }
 
-
+///////////////////////Program///////////////////////////////////////
 no_arvore * criar_no_program(void *program_e, void *program_d) {
 	no_arvore *novo = (no_arvore *)  malloc(sizeof(no_arvore));
 	novo->tipo = PROGRAM;
@@ -86,3 +104,35 @@ t_program * criar_program(void *program_e, void *program_d){
 	novo->program_e = program_e;
 	return novo;
 }
+
+
+///////////////////////Cond///////////////////////////////////////
+no_arvore * criar_no_cond(void *cond_logica, void *cond_if, void *cond_else) {
+	no_arvore *novo = (no_arvore *)  malloc(sizeof(no_arvore));
+	novo->tipo = COND;
+	novo->dado.cond =  criar_cond(cond_logica, cond_if, cond_else);
+	return novo;
+}
+t_cond * criar_cond(void *cond_logica, void *cond_if, void *cond_else){ 
+	t_cond * novo = (t_cond *) malloc(sizeof(t_cond));
+	novo->cond_logica = cond_logica;
+	novo->cond_if = cond_if;
+	novo->cond_else = cond_else;
+	return novo;
+}
+
+
+///////////////////////Loop//////////////////////////////////////
+no_arvore * criar_no_loop(void *loop_logica, void *loop_bloco){
+	no_arvore *novo = (no_arvore *)  malloc(sizeof(no_arvore));
+	novo->tipo = LOOP;
+	novo->dado.loop =  criar_loop(loop_logica, loop_bloco);
+	return novo;
+}
+t_loop * criar_loop(void *loop_logica, void *loop_bloco){ 
+	t_loop * novo = (t_loop *) malloc(sizeof(t_loop));
+	novo->loop_logica = loop_logica;
+	novo->loop_bloco = loop_bloco;
+	return novo;
+}
+

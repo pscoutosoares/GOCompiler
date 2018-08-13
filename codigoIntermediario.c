@@ -1,7 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "y.tab.h"
+#include <string.h>
+#include "arvore.h"
 #include "codigoIntermediario.h"
+#include "tabelaNumero.h"
+#include "y.tab.h"
+
+
+int temp_ctr = 1;
 
 //Insere nó na lista, não retorna nada
 void inserir_no_lista(lista *l, instrucao *inst) {
@@ -60,17 +66,117 @@ lista * inicializar_lista (){
 }
 
 
+
+
+
+char * gerar_temp() {
+	char buffer[256];
+	sprintf(buffer, "t%d", temp_ctr++);
+	return strdup(buffer);
+}
+
+
+void gerar_codigo(no_arvore * raiz) {
+	if(raiz != NULL) {
+		switch(raiz->tipo) {
+			case EXPR: 
+				gerar_codigo_expr(raiz);
+				break;
+			case ATTR:
+				gerar_codigo_attr(raiz);
+				break;
+		}
+	}
+}
+
+char * gerar_codigo_expr(no_arvore *raiz) {
+	char buffer[256];
+	char *addr1, *addr2, *addr3;
+	if(raiz != NULL) {
+		simbolo *s;
+
+		t_expr * dado = raiz->dado.expr;
+		numero *num = dado->dir;
+		switch (dado->op) {
+			case INT:
+				
+				sprintf(buffer, "%d", num->val.dval);
+				return strdup(buffer);	
+			case FLOAT: 
+				sprintf(buffer, "%f", num->val.fval);
+				return strdup(buffer);
+			case ID:
+				s = (simbolo *) dado->dir;
+				return s->lexema;
+
+			case '+':
+			case '-':
+				
+				addr1 = gerar_codigo_expr((no_arvore *) dado->dir);
+				addr2 = gerar_codigo_expr((no_arvore *) dado->esq);
+				addr3 = gerar_temp(); 				
+				printf("%s = %s %c %s\n", addr3, addr1, dado->op, addr2);
+				return addr3;
+
+		}
+	}else{ printf("é nulo\n");}
+}
+
+void gerar_codigo_attr(no_arvore *raiz) {
+	t_attr * dado = raiz->dado.attr;	
+	char * addr = gerar_codigo_expr(dado->expressao);
+	simbolo *s = (simbolo *) dado->resultado;
+	printf("%s = %s\n", s->lexema, addr);
+}
+
+void gerar_codigo_logic(no_arvore *raiz) {
+	//t_attr * dado = raiz->dado.attr;	
+	///char * addr = gerar_codigo_expr(dado->expressao);
+	//simbolo *s = (simbolo *) dado->resultado;
+	//printf("%s = %s\n", s->lexema, addr);
+}
+
+
+
 //Imprime toda a lista, de forma linear
 void imprimir_lista(lista *l){
-
+	printf("Imprimir Código\n");
 	no_lista *cursor  = (no_lista *) malloc(sizeof(no_lista));
 	cursor = l->primeiro;
 	if(cursor == NULL)
 		printf("Lista vazia");
 	do{
-		printf("======%d\n", cursor->dado->opcode);
+		printf("%d\n", cursor->dado->opcode);
 		cursor = cursor->proximo;
 	//Estava dando erro aqui, cuidado para não instanciar um apontador de um null( proximo de um proximo)
 	}while(cursor != NULL);
-	printf("fim do imprimir_lista\n");
+	printf("fim do imprimir código\n");
 }
+
+/*
+
+no_lista * expr_lista(no_arvore *n){
+	
+	t_expr *expr = n->dado.expr;
+	instrucao *inst = criar_instrucao(expr->op, ,expr->esq, expr->dir);
+	
+	no_lista *no = (no_lista *) malloc(sizeof(no_lista));
+	no->dado = inst;
+	
+	return  no;
+	
+}
+
+no_lista * attr_lista(no_arvore *n){
+	
+	t_attr *expr = n->dado.expr;
+	instrucao *inst = criar_instrucao(SAVE, expr->resultado, exp->esq, exp->dir);
+	
+	no_lista *no = (no_lista *) malloc(sizeof(no_lista));
+	no->dado = inst;
+	
+	return  no;
+	
+}
+
+*/
