@@ -34,6 +34,8 @@ no_lista * ultimo_no(lista *l){
 
 //Insere nó na lista, não retorna nada
 void inserir_no_lista(lista *l, instrucao *inst) {
+	
+
 	//Busca o ultimo nó, se o primeiro estiver vazio, retorna NULL
 	no_lista *atual = ultimo_no(l);
 
@@ -55,7 +57,7 @@ void inserir_no_lista(lista *l, instrucao *inst) {
 }
 
 //Aloca as instruções na lista encadeada e retorna o endereço dessa instrução
-instrucao * criar_instrucao( int opcode, void *resultado, void *esq, void *dir){
+instrucao * criar_instrucao(int opcode, char *resultado, char *esq, char *dir){
 	instrucao *temp = (instrucao *) malloc(sizeof(instrucao));
 	
 	temp->opcode = opcode;
@@ -65,32 +67,161 @@ instrucao * criar_instrucao( int opcode, void *resultado, void *esq, void *dir){
 	return temp;
 }
 
+//Imprime toda a lista, de forma linear
+void imprimir_lista(lista *l){
+	printf("Inicio do imprimir Código\n");
+	no_lista *cursor  = (no_lista *) malloc(sizeof(no_lista));
+	cursor = l->primeiro;
+	if(cursor == NULL)
+		printf("Lista vazia\n");
+	else{
+		do{
+			char *c;
+			c = mapear_tipo(cursor->dado->opcode);
+			printf("%s %s %s %s\n", c, cursor->dado->resultado, cursor->dado->esq,  cursor->dado->dir);
+			cursor = cursor->proximo;
+			//Estava dando erro aqui, cuidado para não instanciar um apontador de um null( proximo de um proximo)
+		}while(cursor != NULL);
+	}
+	printf("fim do imprimir código\n");
+}
+
 
 ///////////////////////// Geração de código ////////////////////////////
 
-void gerar_codigo(no_arvore * raiz) {
+void gerar_codigo(lista *l, no_arvore * raiz) {
+	char *c;
+	
 	if(raiz != NULL) {
+		c = mapear_tipo(raiz->tipo);
+		printf("%s\n", c);
 		switch(raiz->tipo) {
-			case EXPR: 
-				gerar_codigo_expr(raiz);
+			case EXPR:
+				gerar_codigo_expr(l, raiz);
 				break;
 			case ATTR:
-				gerar_codigo_attr(raiz);
+				gerar_codigo_attr(l,raiz);
 				break;
 			case LOGIC:
+				gerar_codigo_logic(l, raiz);
+				break;
 			case LOOP:
-			case COND:
-			case STMT:
-			case STMTS:
-			case DECL:
-			case BLOCO:
-			case PROGRAM:
 			
-
+				break;
+			case COND:
+				gerar_codigo_cond(l, raiz);
+				break;
+			case STMT:
+				gerar_codigo_stmt(l, raiz);
+				break;
+			case STMTS:
+				gerar_codigo_stmts(l, raiz);
+				break;
+			case DECL:
+			
+				gerar_codigo_decl(l, raiz);
+				break;
+			case BLOCO:
+	
+				gerar_codigo_bloco(l, raiz);
+				break;
+			case PROGRAM:
+				gerar_codigo_program(l, raiz);
 				break;
 		}
 	}
 }
+
+
+void gerar_codigo_program(lista *l, no_arvore * no){
+	if(no != NULL) {
+		no_arvore *no_direita = no->dado.program->program_d;
+		no_arvore *no_esquerda = no->dado.program->program_e;
+
+		gerar_codigo(l,no_direita);
+		gerar_codigo(l,no_esquerda);
+	}
+}
+
+
+void gerar_codigo_bloco(lista *l, no_arvore * no_bloco){
+	if(no_bloco != NULL) {
+
+		no_arvore *no_stmts = no_bloco->dado.bloco->conteudo;
+		gerar_codigo(l,no_stmts);
+	}
+}
+
+
+void gerar_codigo_stmts(lista *l, no_arvore * no_stmts){
+	if(no_stmts != NULL) {
+
+		no_arvore *no_stmt_esquerda = no_stmts->dado.stmts->declaracao_e;
+		no_arvore *no_stmt_direita = no_stmts->dado.stmts->declaracao_d;
+		
+		gerar_codigo(l,no_stmt_direita);
+		gerar_codigo(l,no_stmt_esquerda);
+	}
+}
+void gerar_codigo_stmt(lista *l ,no_arvore *no){
+	if(no != NULL) {
+		no_arvore *no_declaracao = no->dado.stmt->declaracao;
+		//printf("tipo:%d\n", no_declaracao->tipo );
+		gerar_codigo(l, no_declaracao);
+	}
+}
+
+void gerar_codigo_decl(lista *l, no_arvore * no){
+	if(no != NULL) {
+		char *resultado, *direita, *esquerda;
+		
+		no_arvore *no_decl = no->dado.stmt->declaracao;
+		simbolo *s = no_decl->dado.decl->id;
+		direita = strdup(s->lexema);
+		
+		resultado = "LOAD";
+		instrucao *i = criar_instrucao(no->tipo,resultado,direita,NULL);
+
+		inserir_no_lista(l,i);
+	}
+}
+
+void gerar_codigo_cond(lista *l, no_arvore * no){
+
+	if(no != NULL) {
+
+		no_arvore *no_logica = no->dado.cond->cond_logica;
+		no_arvore *no_inf = no->dado.cond->cond_if;
+		no_arvore *no_else = no->dado.cond->cond_else;
+		
+		gerar_codigo(l,no_logica);
+		gerar_codigo_bloco(l,no_inf);
+		gerar_codigo_bloco(l,no_else);
+
+
+
+		//char *resultado, *direita, *esquerda;
+		//no_arvore *no_decl = no->dado.stmt->declaracao;
+		//simbolo *s = no_decl->dado.decl->id;
+		//direita = strdup(s->lexema);
+		//instrucao *i = criar_instrucao(no->tipo,resultado,direita,"LABEL_IF");
+		//inserir_no_lista(l,i);
+	}
+}
+void gerar_codigo_logic(lista *l ,no_arvore *no) {
+	
+	if(no != NULL) {
+
+		int op = no->dado.logic->op;
+		no_arvore *no_logic_esquerda = no->dado.logic->esq;
+		no_arvore *no_logic_direita = no->dado.logic->dir;
+		
+		gerar_codigo(l,no_logic_esquerda);
+		gerar_codigo(l,no_logic_direita);
+	}
+}
+
+
 char * gerar_temp() {
 	char buffer[256];
 	sprintf(buffer, "t%d", temp_ctr++);
@@ -98,7 +229,7 @@ char * gerar_temp() {
 }
 
 
-char * gerar_codigo_expr(no_arvore *raiz) {
+char * gerar_codigo_expr(lista *l, no_arvore *raiz) {
 	char buffer[256];
 	char *addr1, *addr2, *addr3;
 	if(raiz != NULL) {
@@ -108,7 +239,6 @@ char * gerar_codigo_expr(no_arvore *raiz) {
 		numero *num = dado->dir;
 		switch (dado->op) {
 			case INT:
-				
 				sprintf(buffer, "%d", num->val.dval);
 				return strdup(buffer);	
 			case FLOAT: 
@@ -121,8 +251,8 @@ char * gerar_codigo_expr(no_arvore *raiz) {
 			case '+':
 			case '-':
 				
-				addr1 = gerar_codigo_expr((no_arvore *) dado->dir);
-				addr2 = gerar_codigo_expr((no_arvore *) dado->esq);
+				addr1 = gerar_codigo_expr(l,(no_arvore *) dado->dir);
+				addr2 = gerar_codigo_expr(l,(no_arvore *) dado->esq);
 				addr3 = gerar_temp(); 				
 				printf("%s = %s %c %s\n", addr3, addr1, dado->op, addr2);
 				return addr3;
@@ -131,35 +261,56 @@ char * gerar_codigo_expr(no_arvore *raiz) {
 	}else{ printf("é nulo\n");}
 }
 
-void gerar_codigo_attr(no_arvore *raiz) {
+void gerar_codigo_attr(lista *l, no_arvore *raiz) {
 	t_attr * dado = raiz->dado.attr;	
-	char * addr = gerar_codigo_expr(dado->expressao);
+	char * addr = gerar_codigo_expr(l, dado->expressao);
 	simbolo *s = (simbolo *) dado->resultado;
 	printf("%s = %s\n", s->lexema, addr);
 }
 
-void gerar_codigo_logic(no_arvore *raiz) {
-	//t_attr * dado = raiz->dado.attr;	
-	///char * addr = gerar_codigo_expr(dado->expressao);
-	//simbolo *s = (simbolo *) dado->resultado;
-	//printf("%s = %s\n", s->lexema, addr);
-}
 
 
 
-//Imprime toda a lista, de forma linear
-void imprimir_lista(lista *l){
-	printf("Inicio do imprimir Código\n");
-	no_lista *cursor  = (no_lista *) malloc(sizeof(no_lista));
-	cursor = l->primeiro;
-	if(cursor == NULL)
-		printf("Lista vazia");
-	do{
-		printf("%d\n", cursor->dado->opcode);
-		cursor = cursor->proximo;
-	//Estava dando erro aqui, cuidado para não instanciar um apontador de um null( proximo de um proximo)
-	}while(cursor != NULL);
-	printf("fim do imprimir código\n");
+
+char * mapear_tipo(int tipo){
+	char *cod;
+	
+	switch(tipo) {
+		case EXPR:
+			cod = "EXPR";
+			break;
+		case ATTR:
+			cod ="ATTR";
+			break;
+		case LOGIC:
+			cod ="LOGIC";
+			break;
+		case LOOP:
+			cod ="LOOP";
+			break;
+		case COND:
+			cod ="COND";
+			break;
+		case STMT:
+			cod ="STMT";
+			break;
+		case STMTS:
+			cod ="STMTS";
+			break;
+		case DECL:
+			cod ="DECL";
+			break;
+		case BLOCO:
+			cod ="BLOCO";
+			break;
+		case PROGRAM:
+			cod ="PROGRAM";
+			break;
+		default:
+			cod = " ";
+			//sprintf(cod,"Cod não encontrado %d",tipo);
+	}	
+	return cod;
 }
 
 /*

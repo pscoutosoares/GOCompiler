@@ -6,7 +6,7 @@
 ///////////////////////Expr//////////////////////////////////////////
 no_arvore * criar_no_expressao(int op, void *dir, void *esq) {
 	no_arvore *novo = (no_arvore *)  malloc(sizeof(no_arvore));
-	novo->tipo = LOGIC;
+	novo->tipo = EXPR;
 	novo->dado.expr =  criar_expressao(op, dir, esq);
 	return novo;
 }
@@ -93,13 +93,13 @@ t_decl * criar_decls(int tipo, simbolo *id){
 }
 
 ///////////////////////Bloco//////////////////////////////////////////
-no_arvore * criar_no_bloco(void* stmts) {
+no_arvore * criar_no_bloco(void *stmts) {
 	no_arvore *novo = (no_arvore *)  malloc(sizeof(no_arvore));
 	novo->tipo = BLOCO;
 	novo->dado.bloco =  criar_bloco(stmts);
 	return novo;
 }
-t_bloco * criar_bloco(void* stmts){ 
+t_bloco * criar_bloco(void *stmts){ 
 	t_bloco * novo = (t_bloco *) malloc(sizeof(t_bloco));
 	novo->conteudo = stmts;
 	return novo;

@@ -42,11 +42,14 @@ program:
 			$$ = (long int) n;
 
 			lista *list = inicializar_lista();
-			instrucao *inst = criar_instrucao(n->tipo, NULL, n->dado.program->program_e, n->dado.program->program_d);
-			inserir_no_lista(list,inst);
+			//instrucao *inst = criar_instrucao(n->tipo, NULL, n->dado.program->program_e, n->dado.program->program_d);
+			//inserir_no_lista(list,inst);
+
+			gerar_codigo(list, n);
 			imprimir_lista(list);
+		
 		}
-	|
+	|	{ $$ = 0;}
 	; 	
 
 bloco: 
@@ -60,16 +63,16 @@ bloco:
 			imprimir_contexto(topo_pilha(pilha));
 		  	desempilhar_contexto(&pilha);
 
-		  	no_arvore *n = criar_no_bloco((void *) $2);
+		  	no_arvore *n = criar_no_bloco((void *) $3);
+		  	
 			$$ = (long int) n;
-
 		}
 	;
 
 decl:
 	VAR ID TYPE ';' 	
 		{ 
-			simbolo * s = localizar_simbolo(topo_pilha(pilha), (char *) $2);
+			simbolo * s = localizar_simbolo_local(topo_pilha(pilha), (char *) $2);
 			if(s == NULL){
 				//Cria um nó contendo o simbolo
 				//Lembrar de dar o cast para char, pois apenas é passado o endereço no lex
@@ -78,10 +81,6 @@ decl:
 				//insere o nó do simbolo na tabela do contexto atual,
 				//apontado pela pilha
 				inserir_simbolo(topo_pilha(pilha), s);
-
-
-
-
 			}
 			else  {
 				yyerror("Identificador já declarado");
@@ -95,11 +94,15 @@ stmts:
 			no_arvore *n = criar_no_statements((void *) $1, (void *) $2);
 			$$ = (long int) n;
 		}
-	| 	
+	| 	{ $$ = 0;}
 	;
 
 stmt:
-	cond
+	cond 
+		{
+			no_arvore *n = criar_no_statement((void *) $1);
+			$$ = (long int) n;
+		}
 	| loop			
 		{
 			no_arvore *n = criar_no_statement((void *) $1);

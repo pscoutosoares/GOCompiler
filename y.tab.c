@@ -513,10 +513,10 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    39,    39,    49,    54,    53,    70,    93,    98,   102,
-     103,   108,   113,   118,   124,   132,   137,   145,   153,   159,
-     165,   171,   177,   183,   192,   205,   225,   243,   261,   279,
-     283,   292
+       0,    39,    39,    52,    57,    56,    73,    92,    97,   101,
+     106,   111,   116,   121,   127,   135,   140,   148,   156,   162,
+     168,   174,   180,   186,   195,   208,   228,   246,   264,   282,
+     286,   295
 };
 #endif
 
@@ -530,7 +530,7 @@ static const char *const yytname[] =
   "PRINT", "SCAN", "EXPR", "ATTR", "VAR", "STMT", "STMTS", "DECL", "BLOCO",
   "PROGRAM", "LOGIC", "COND", "LOOP", "ADD", "SUB", "MUL", "DIV", "MOD",
   "SAVE", "LOAD", "'+'", "'-'", "'*'", "'/'", "NUMBER", "UMINUS", "'{'",
-  "'}'", "';'", "'='", "'('", "')'", "$accept", "program", "bloco", "@1",
+  "'}'", "';'", "'='", "'('", "')'", "$accept", "program", "bloco", "$@1",
   "decl", "stmts", "stmt", "cond", "loop", "logic", "attr", "expr", YY_NULLPTR
 };
 #endif
@@ -1339,39 +1339,48 @@ yyreduce:
 			(yyval) = (long int) n;
 
 			lista *list = inicializar_lista();
-			instrucao *inst = criar_instrucao(n->tipo, NULL, n->dado.program->program_e, n->dado.program->program_d);
-			inserir_no_lista(list,inst);
+			//instrucao *inst = criar_instrucao(n->tipo, NULL, n->dado.program->program_e, n->dado.program->program_d);
+			//inserir_no_lista(list,inst);
+
+			gerar_codigo(list, n);
 			imprimir_lista(list);
+		
 		}
-#line 1347 "y.tab.c" /* yacc.c:1646  */
+#line 1350 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 3:
+#line 52 "gramatica.yacc" /* yacc.c:1646  */
+    { (yyval) = 0;}
+#line 1356 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 54 "gramatica.yacc" /* yacc.c:1646  */
+#line 57 "gramatica.yacc" /* yacc.c:1646  */
     { 
 			tabela *contexto = criar_contexto(topo_pilha(pilha));
 		  	pilha = empilhar_contexto(pilha, contexto);
 		}
-#line 1356 "y.tab.c" /* yacc.c:1646  */
+#line 1365 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 59 "gramatica.yacc" /* yacc.c:1646  */
+#line 62 "gramatica.yacc" /* yacc.c:1646  */
     { 
 			imprimir_contexto(topo_pilha(pilha));
 		  	desempilhar_contexto(&pilha);
 
-		  	no_arvore *n = criar_no_bloco((void *) (yyvsp[-2]));
+		  	no_arvore *n = criar_no_bloco((void *) (yyvsp[-1]));
+		  	
 			(yyval) = (long int) n;
-
 		}
-#line 1369 "y.tab.c" /* yacc.c:1646  */
+#line 1378 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 71 "gramatica.yacc" /* yacc.c:1646  */
+#line 74 "gramatica.yacc" /* yacc.c:1646  */
     { 
-			simbolo * s = localizar_simbolo(topo_pilha(pilha), (char *) (yyvsp[-2]));
+			simbolo * s = localizar_simbolo_local(topo_pilha(pilha), (char *) (yyvsp[-2]));
 			if(s == NULL){
 				//Cria um nó contendo o simbolo
 				//Lembrar de dar o cast para char, pois apenas é passado o endereço no lex
@@ -1380,162 +1389,173 @@ yyreduce:
 				//insere o nó do simbolo na tabela do contexto atual,
 				//apontado pela pilha
 				inserir_simbolo(topo_pilha(pilha), s);
-
-
-
-
 			}
 			else  {
 				yyerror("Identificador já declarado");
 			}
 		}
-#line 1393 "y.tab.c" /* yacc.c:1646  */
+#line 1398 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 94 "gramatica.yacc" /* yacc.c:1646  */
+#line 93 "gramatica.yacc" /* yacc.c:1646  */
     {
 			no_arvore *n = criar_no_statements((void *) (yyvsp[-1]), (void *) (yyvsp[0]));
 			(yyval) = (long int) n;
 		}
-#line 1402 "y.tab.c" /* yacc.c:1646  */
+#line 1407 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 10:
-#line 104 "gramatica.yacc" /* yacc.c:1646  */
+  case 8:
+#line 97 "gramatica.yacc" /* yacc.c:1646  */
+    { (yyval) = 0;}
+#line 1413 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 9:
+#line 102 "gramatica.yacc" /* yacc.c:1646  */
     {
 			no_arvore *n = criar_no_statement((void *) (yyvsp[0]));
 			(yyval) = (long int) n;
 		}
-#line 1411 "y.tab.c" /* yacc.c:1646  */
+#line 1422 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 10:
+#line 107 "gramatica.yacc" /* yacc.c:1646  */
+    {
+			no_arvore *n = criar_no_statement((void *) (yyvsp[0]));
+			(yyval) = (long int) n;
+		}
+#line 1431 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 109 "gramatica.yacc" /* yacc.c:1646  */
+#line 112 "gramatica.yacc" /* yacc.c:1646  */
     {
 			no_arvore *n = criar_no_statement((void *) (yyvsp[-1]));
 			(yyval) = (long int) n;
 		}
-#line 1420 "y.tab.c" /* yacc.c:1646  */
+#line 1440 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 114 "gramatica.yacc" /* yacc.c:1646  */
+#line 117 "gramatica.yacc" /* yacc.c:1646  */
     {
 			no_arvore *n = criar_no_statement((void *) (yyvsp[0]));
 			(yyval) = (long int) n;
 		}
-#line 1429 "y.tab.c" /* yacc.c:1646  */
+#line 1449 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 119 "gramatica.yacc" /* yacc.c:1646  */
+#line 122 "gramatica.yacc" /* yacc.c:1646  */
     {
 			no_arvore *n = criar_no_statement((void *) (yyvsp[0]));
 			(yyval) = (long int) n;
 			//gerar_codigo((no_arvore *) $1);
 		}
-#line 1439 "y.tab.c" /* yacc.c:1646  */
+#line 1459 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 125 "gramatica.yacc" /* yacc.c:1646  */
+#line 128 "gramatica.yacc" /* yacc.c:1646  */
     {
 			no_arvore *n = criar_no_statement((void *) (yyvsp[0]));
 			(yyval) = (long int) n;
 		}
-#line 1448 "y.tab.c" /* yacc.c:1646  */
+#line 1468 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 133 "gramatica.yacc" /* yacc.c:1646  */
+#line 136 "gramatica.yacc" /* yacc.c:1646  */
     {
 			no_arvore *n = criar_no_cond((void *) (yyvsp[-1]), (void *) (yyvsp[0]), NULL);
 			(yyval) = (long int) n;
 		}
-#line 1457 "y.tab.c" /* yacc.c:1646  */
+#line 1477 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 138 "gramatica.yacc" /* yacc.c:1646  */
+#line 141 "gramatica.yacc" /* yacc.c:1646  */
     {
 			no_arvore *n = criar_no_cond((void *) (yyvsp[-3]), (void *) (yyvsp[-2]), (void *) (yyvsp[0]));
 			(yyval) = (long int) n;
 		}
-#line 1466 "y.tab.c" /* yacc.c:1646  */
+#line 1486 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 146 "gramatica.yacc" /* yacc.c:1646  */
+#line 149 "gramatica.yacc" /* yacc.c:1646  */
     {
 			no_arvore *n = criar_no_loop((void *) (yyvsp[-1]), (void *) (yyvsp[0]));
 			(yyval) = (long int) n;
 		}
-#line 1475 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 18:
-#line 154 "gramatica.yacc" /* yacc.c:1646  */
-    {
-			no_arvore *n = criar_no_logic(LT, (void *) (yyvsp[-2]), (void *) (yyvsp[0]));
-			(yyval) = (long int) n;
-
-		}
-#line 1485 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 19:
-#line 160 "gramatica.yacc" /* yacc.c:1646  */
-    {
-			no_arvore *n = criar_no_logic(LE, (void *) (yyvsp[-2]), (void *) (yyvsp[0]));
-			(yyval) = (long int) n;
-
-		}
 #line 1495 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 20:
-#line 166 "gramatica.yacc" /* yacc.c:1646  */
+  case 18:
+#line 157 "gramatica.yacc" /* yacc.c:1646  */
     {
-			no_arvore *n = criar_no_logic(EQ, (void *) (yyvsp[-2]), (void *) (yyvsp[0]));
+			no_arvore *n = criar_no_logic(LT, (void *) (yyvsp[-2]), (void *) (yyvsp[0]));
 			(yyval) = (long int) n;
 
 		}
 #line 1505 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 21:
-#line 172 "gramatica.yacc" /* yacc.c:1646  */
+  case 19:
+#line 163 "gramatica.yacc" /* yacc.c:1646  */
     {
-			no_arvore *n = criar_no_logic(NE, (void *) (yyvsp[-2]), (void *) (yyvsp[0]));
+			no_arvore *n = criar_no_logic(LE, (void *) (yyvsp[-2]), (void *) (yyvsp[0]));
 			(yyval) = (long int) n;
 
 		}
 #line 1515 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 22:
-#line 178 "gramatica.yacc" /* yacc.c:1646  */
+  case 20:
+#line 169 "gramatica.yacc" /* yacc.c:1646  */
     {
-			no_arvore *n = criar_no_logic(GT, (void *) (yyvsp[-2]), (void *) (yyvsp[0]));
+			no_arvore *n = criar_no_logic(EQ, (void *) (yyvsp[-2]), (void *) (yyvsp[0]));
 			(yyval) = (long int) n;
 
 		}
 #line 1525 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 23:
-#line 184 "gramatica.yacc" /* yacc.c:1646  */
+  case 21:
+#line 175 "gramatica.yacc" /* yacc.c:1646  */
     {
-			no_arvore *n = criar_no_logic(GE, (void *) (yyvsp[-2]), (void *) (yyvsp[0]));
+			no_arvore *n = criar_no_logic(NE, (void *) (yyvsp[-2]), (void *) (yyvsp[0]));
 			(yyval) = (long int) n;
 
 		}
 #line 1535 "y.tab.c" /* yacc.c:1646  */
     break;
 
+  case 22:
+#line 181 "gramatica.yacc" /* yacc.c:1646  */
+    {
+			no_arvore *n = criar_no_logic(GT, (void *) (yyvsp[-2]), (void *) (yyvsp[0]));
+			(yyval) = (long int) n;
+
+		}
+#line 1545 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 23:
+#line 187 "gramatica.yacc" /* yacc.c:1646  */
+    {
+			no_arvore *n = criar_no_logic(GE, (void *) (yyvsp[-2]), (void *) (yyvsp[0]));
+			(yyval) = (long int) n;
+
+		}
+#line 1555 "y.tab.c" /* yacc.c:1646  */
+    break;
+
   case 24:
-#line 193 "gramatica.yacc" /* yacc.c:1646  */
+#line 196 "gramatica.yacc" /* yacc.c:1646  */
     { 
 			simbolo * s = localizar_simbolo(topo_pilha(pilha), (char *) (yyvsp[-3]));
 			if(s == NULL)
@@ -1545,11 +1565,11 @@ yyreduce:
 				(yyval) = (long int) n;
 			}
 		}
-#line 1549 "y.tab.c" /* yacc.c:1646  */
+#line 1569 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 206 "gramatica.yacc" /* yacc.c:1646  */
+#line 209 "gramatica.yacc" /* yacc.c:1646  */
     {
 			no_arvore *n = criar_no_expressao('+', (void *) (yyvsp[-2]), (void *) (yyvsp[0])); 
 			
@@ -1569,11 +1589,11 @@ yyreduce:
 
 
 		}
-#line 1573 "y.tab.c" /* yacc.c:1646  */
+#line 1593 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 226 "gramatica.yacc" /* yacc.c:1646  */
+#line 229 "gramatica.yacc" /* yacc.c:1646  */
     {
 			no_arvore *n = criar_no_expressao('-', (void *) (yyvsp[-2]), (void *) (yyvsp[0])); 
 		  	
@@ -1591,11 +1611,11 @@ yyreduce:
 				
 		  	(yyval) = (long int) n; 
 		}
-#line 1595 "y.tab.c" /* yacc.c:1646  */
+#line 1615 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 244 "gramatica.yacc" /* yacc.c:1646  */
+#line 247 "gramatica.yacc" /* yacc.c:1646  */
     {
 			no_arvore *n = criar_no_expressao('*', (void *) (yyvsp[-2]), (void *) (yyvsp[0])); 
 		  	
@@ -1613,11 +1633,11 @@ yyreduce:
 				
 		  	(yyval) = (long int) n; 
 		}
-#line 1617 "y.tab.c" /* yacc.c:1646  */
+#line 1637 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 262 "gramatica.yacc" /* yacc.c:1646  */
+#line 265 "gramatica.yacc" /* yacc.c:1646  */
     {
 			no_arvore *n = criar_no_expressao('/', (void *) (yyvsp[-2]), (void *) (yyvsp[0])); 
 		  	
@@ -1635,19 +1655,19 @@ yyreduce:
 				
 		  	(yyval) = (long int) n; 
 		}
-#line 1639 "y.tab.c" /* yacc.c:1646  */
+#line 1659 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 280 "gramatica.yacc" /* yacc.c:1646  */
+#line 283 "gramatica.yacc" /* yacc.c:1646  */
     { 
 			(yyval) = (yyvsp[-1]); 
 		}
-#line 1647 "y.tab.c" /* yacc.c:1646  */
+#line 1667 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 284 "gramatica.yacc" /* yacc.c:1646  */
+#line 287 "gramatica.yacc" /* yacc.c:1646  */
     { 
 
 			//capturar o tipo, na tabela de simbolos 
@@ -1656,11 +1676,11 @@ yyreduce:
 		  	
 		  	(yyval) = (long int) n;  
 		}
-#line 1660 "y.tab.c" /* yacc.c:1646  */
+#line 1680 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 293 "gramatica.yacc" /* yacc.c:1646  */
+#line 296 "gramatica.yacc" /* yacc.c:1646  */
     { 
 			simbolo * s = localizar_simbolo(topo_pilha(pilha), (char *) (yyvsp[0]));
 		  	if(s == NULL)
@@ -1671,11 +1691,11 @@ yyreduce:
 				(yyval) = (long int) n;
 			}
 	 	}
-#line 1675 "y.tab.c" /* yacc.c:1646  */
+#line 1695 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1679 "y.tab.c" /* yacc.c:1646  */
+#line 1699 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1903,7 +1923,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 305 "gramatica.yacc" /* yacc.c:1906  */
+#line 308 "gramatica.yacc" /* yacc.c:1906  */
 
 
 void yyerror(char *s) {

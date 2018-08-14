@@ -1,10 +1,25 @@
 {
 	var a int;
 	a = 5;
+	var b float64;
+	b = 6.6;
+	var j int;
+	j = b + a;
 	{
 		if 5 < 7 {
-			var b int;
-			b = 5;
+			var a int;
+			a = 5;
+			var i int;
+			i =4;
+			for i < 10 {
+				i= i+1;
+				var sum float64;
+				sum = 3;
+			}
+		}
+		if a == b{
+			var j int;
+			j = 10.10;
 		}
 	}
 }
